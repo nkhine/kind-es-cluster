@@ -1,0 +1,36 @@
+kind: Cluster
+apiVersion: kind.sigs.k8s.io/v1alpha3
+nodes:
+- role: control-plane
+  extraMounts:
+  - containerPath: /kind/manifests/default-cni.yaml
+    hostPath: /tmp/cni/kube-flannel.yaml
+    readOnly: true
+    type: File
+- role: worker
+  extraPortMappings:
+  - containerPort: 9200
+    hostPort: 9200
+    listenAddress: "127.0.0.1" # Optional, defaults to "0.0.0.0"
+    #protocol: udp # Optional, defaults to tcp
+- role: worker
+  extraPortMappings:
+  - containerPort: 9200
+    hostPort: 9200
+    listenAddress: "127.0.0.1" # Optional, defaults to "0.0.0.0"
+    #protocol: udp # Optional, defaults to tcp
+- role: worker
+  extraPortMappings:
+  - containerPort: 9200
+    hostPort: 9200
+    listenAddress: "127.0.0.1" # Optional, defaults to "0.0.0.0"
+    #protocol: udp # Optional, defaults to tcp
+kubeadmConfigPatches:
+- |
+  apiVersion: kubeadm.k8s.io/v1beta1
+  kind: ClusterConfiguration
+  metadata:
+    name: config
+  networking:
+    serviceSubnet: "10.96.0.1/12"
+    podSubnet: "192.168.0.0/16"
